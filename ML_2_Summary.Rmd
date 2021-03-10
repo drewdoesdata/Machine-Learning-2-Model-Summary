@@ -316,8 +316,30 @@ Author: Andrew Tremblay & Thomas Trankle
 
 ### Summary/description:
 
+**Regression Splines** are more flexible than polynomials and step functions. 
+
+This is because the are actually an extension of the two. 
+
+They involve dividing the range of *X* into *K* distinct regions. Within each region, 
+a polynomial function is fit to the data. However, these polynomials are constrained so that 
+they **join smoothly at the region boundaries, or knots**. Provided that the interval is
+divided into enough regions, this can produce an extremely flexible fit.
+
+The points where the coefficients change are called *knots*.
+
+In general, if we place *K* different knots throughout the range of *X*, then we
+will end up fitting *K + 1* different polynomials.
 
 ### When to employ this method/model:
+
+Instead of fitting a high-degree polynomial over the entire range of *X*, *piecewise
+polynomial regression* involves fitting separate low-degree polynomials over different 
+regions of *X*.
+
+We use this model when we need a high degree of flexibility.
+
+Using more knots leads to a more flexible piecewise polynomial.
+
 
 
 
@@ -330,13 +352,23 @@ Author: Andrew Tremblay & Thomas Trankle
 ### Model Tests:
 
 ```{r}
+#Regression Splines, Natural Splines
+lm(y ~ bs(x, knots = c(1,2,3)))
+lm(y ~ bs(x, df = 6))
 
+glm(y ~ ns(x, knots = c(1,2,3)))
+glm(y ~ ns(x, df = 6))
 ```
 
 ### Model Improvements:
 
 ```{r}
+#Reg Splines
+cv.lm()
+cv.glm()
 
+#Smoothing Splines: Cross Validation
+smooth.spline(x,y,df=16,cv=TRUE)
 ```
 
 ### Comprehensive Example:
